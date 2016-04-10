@@ -1,0 +1,934 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.5.0
+-- Dumped by pg_dump version 9.5.0
+
+-- Started on 2016-04-10 21:16:21
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 198 (class 3079 OID 12355)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 2215 (class 0 OID 0)
+-- Dependencies: 198
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 195 (class 1259 OID 33592)
+-- Name: bike; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE bike (
+    id_bike integer NOT NULL,
+    bike_code integer,
+    id_model integer
+);
+
+
+ALTER TABLE bike OWNER TO postgres;
+
+--
+-- TOC entry 194 (class 1259 OID 33590)
+-- Name: bike_id_bike_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE bike_id_bike_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE bike_id_bike_seq OWNER TO postgres;
+
+--
+-- TOC entry 2216 (class 0 OID 0)
+-- Dependencies: 194
+-- Name: bike_id_bike_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE bike_id_bike_seq OWNED BY bike.id_bike;
+
+
+--
+-- TOC entry 189 (class 1259 OID 33551)
+-- Name: model; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE model (
+    id_model integer NOT NULL,
+    id_typ integer,
+    id_znacka integer,
+    nazov text,
+    cena real
+);
+
+
+ALTER TABLE model OWNER TO postgres;
+
+--
+-- TOC entry 188 (class 1259 OID 33549)
+-- Name: model_id_model_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE model_id_model_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE model_id_model_seq OWNER TO postgres;
+
+--
+-- TOC entry 2217 (class 0 OID 0)
+-- Dependencies: 188
+-- Name: model_id_model_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE model_id_model_seq OWNED BY model.id_model;
+
+
+--
+-- TOC entry 183 (class 1259 OID 33516)
+-- Name: objednavka; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE objednavka (
+    id_objednavka integer NOT NULL,
+    id_user integer NOT NULL,
+    date_from date,
+    date_to date,
+    stav integer,
+    cena_objednavky real
+);
+
+
+ALTER TABLE objednavka OWNER TO postgres;
+
+--
+-- TOC entry 182 (class 1259 OID 33514)
+-- Name: objednavka_id_objednavka_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE objednavka_id_objednavka_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE objednavka_id_objednavka_seq OWNER TO postgres;
+
+--
+-- TOC entry 2218 (class 0 OID 0)
+-- Dependencies: 182
+-- Name: objednavka_id_objednavka_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE objednavka_id_objednavka_seq OWNED BY objednavka.id_objednavka;
+
+
+--
+-- TOC entry 197 (class 1259 OID 33600)
+-- Name: polozka_ob; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE polozka_ob (
+    id_bike integer,
+    id_polozka integer NOT NULL,
+    id_objednavka integer
+);
+
+
+ALTER TABLE polozka_ob OWNER TO postgres;
+
+--
+-- TOC entry 196 (class 1259 OID 33598)
+-- Name: polozka_ob_id_polozka_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE polozka_ob_id_polozka_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE polozka_ob_id_polozka_seq OWNER TO postgres;
+
+--
+-- TOC entry 2219 (class 0 OID 0)
+-- Dependencies: 196
+-- Name: polozka_ob_id_polozka_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE polozka_ob_id_polozka_seq OWNED BY polozka_ob.id_polozka;
+
+
+--
+-- TOC entry 191 (class 1259 OID 33572)
+-- Name: prislusenstvo; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE prislusenstvo (
+    id_prislusenstvo integer NOT NULL,
+    nazov text,
+    cena real
+);
+
+
+ALTER TABLE prislusenstvo OWNER TO postgres;
+
+--
+-- TOC entry 190 (class 1259 OID 33570)
+-- Name: prislusenstvo_id_prislusenstvo_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE prislusenstvo_id_prislusenstvo_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE prislusenstvo_id_prislusenstvo_seq OWNER TO postgres;
+
+--
+-- TOC entry 2220 (class 0 OID 0)
+-- Dependencies: 190
+-- Name: prislusenstvo_id_prislusenstvo_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE prislusenstvo_id_prislusenstvo_seq OWNED BY prislusenstvo.id_prislusenstvo;
+
+
+--
+-- TOC entry 185 (class 1259 OID 33527)
+-- Name: typ; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE typ (
+    typn text,
+    id_typ integer NOT NULL
+);
+
+
+ALTER TABLE typ OWNER TO postgres;
+
+--
+-- TOC entry 184 (class 1259 OID 33525)
+-- Name: typ_id_typ_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE typ_id_typ_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE typ_id_typ_seq OWNER TO postgres;
+
+--
+-- TOC entry 2221 (class 0 OID 0)
+-- Dependencies: 184
+-- Name: typ_id_typ_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE typ_id_typ_seq OWNED BY typ.id_typ;
+
+
+--
+-- TOC entry 180 (class 1259 OID 25294)
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE users (
+    name text NOT NULL,
+    email text NOT NULL,
+    paswd text,
+    idus integer NOT NULL,
+    type integer
+);
+
+
+ALTER TABLE users OWNER TO postgres;
+
+--
+-- TOC entry 181 (class 1259 OID 25302)
+-- Name: users_US_ID_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "users_US_ID_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "users_US_ID_seq" OWNER TO postgres;
+
+--
+-- TOC entry 2222 (class 0 OID 0)
+-- Dependencies: 181
+-- Name: users_US_ID_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE "users_US_ID_seq" OWNED BY users.idus;
+
+
+--
+-- TOC entry 187 (class 1259 OID 33538)
+-- Name: znacka; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE znacka (
+    id_znacka integer NOT NULL,
+    znackan text
+);
+
+
+ALTER TABLE znacka OWNER TO postgres;
+
+--
+-- TOC entry 186 (class 1259 OID 33536)
+-- Name: znacka_id_znacka_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE znacka_id_znacka_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE znacka_id_znacka_seq OWNER TO postgres;
+
+--
+-- TOC entry 2223 (class 0 OID 0)
+-- Dependencies: 186
+-- Name: znacka_id_znacka_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE znacka_id_znacka_seq OWNED BY znacka.id_znacka;
+
+
+--
+-- TOC entry 193 (class 1259 OID 33583)
+-- Name: zoznam_prislusenstva; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE zoznam_prislusenstva (
+    id_zoznamp integer NOT NULL,
+    id_prislusenstvo integer,
+    id_objednavka integer
+);
+
+
+ALTER TABLE zoznam_prislusenstva OWNER TO postgres;
+
+--
+-- TOC entry 192 (class 1259 OID 33581)
+-- Name: zoznam_prislusenstva_id_zoznamp_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE zoznam_prislusenstva_id_zoznamp_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE zoznam_prislusenstva_id_zoznamp_seq OWNER TO postgres;
+
+--
+-- TOC entry 2224 (class 0 OID 0)
+-- Dependencies: 192
+-- Name: zoznam_prislusenstva_id_zoznamp_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE zoznam_prislusenstva_id_zoznamp_seq OWNED BY zoznam_prislusenstva.id_zoznamp;
+
+
+--
+-- TOC entry 2042 (class 2604 OID 33595)
+-- Name: id_bike; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY bike ALTER COLUMN id_bike SET DEFAULT nextval('bike_id_bike_seq'::regclass);
+
+
+--
+-- TOC entry 2039 (class 2604 OID 33554)
+-- Name: id_model; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY model ALTER COLUMN id_model SET DEFAULT nextval('model_id_model_seq'::regclass);
+
+
+--
+-- TOC entry 2036 (class 2604 OID 33519)
+-- Name: id_objednavka; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY objednavka ALTER COLUMN id_objednavka SET DEFAULT nextval('objednavka_id_objednavka_seq'::regclass);
+
+
+--
+-- TOC entry 2043 (class 2604 OID 33603)
+-- Name: id_polozka; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY polozka_ob ALTER COLUMN id_polozka SET DEFAULT nextval('polozka_ob_id_polozka_seq'::regclass);
+
+
+--
+-- TOC entry 2040 (class 2604 OID 33575)
+-- Name: id_prislusenstvo; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY prislusenstvo ALTER COLUMN id_prislusenstvo SET DEFAULT nextval('prislusenstvo_id_prislusenstvo_seq'::regclass);
+
+
+--
+-- TOC entry 2037 (class 2604 OID 33530)
+-- Name: id_typ; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY typ ALTER COLUMN id_typ SET DEFAULT nextval('typ_id_typ_seq'::regclass);
+
+
+--
+-- TOC entry 2035 (class 2604 OID 25304)
+-- Name: idus; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY users ALTER COLUMN idus SET DEFAULT nextval('"users_US_ID_seq"'::regclass);
+
+
+--
+-- TOC entry 2038 (class 2604 OID 33541)
+-- Name: id_znacka; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY znacka ALTER COLUMN id_znacka SET DEFAULT nextval('znacka_id_znacka_seq'::regclass);
+
+
+--
+-- TOC entry 2041 (class 2604 OID 33586)
+-- Name: id_zoznamp; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY zoznam_prislusenstva ALTER COLUMN id_zoznamp SET DEFAULT nextval('zoznam_prislusenstva_id_zoznamp_seq'::regclass);
+
+
+--
+-- TOC entry 2205 (class 0 OID 33592)
+-- Dependencies: 195
+-- Data for Name: bike; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY bike (id_bike, bike_code, id_model) FROM stdin;
+26	946149	10
+25	178941	4
+21	286131	19
+20	437822	15
+19	963248	19
+18	156447	18
+17	632155	17
+16	761411	16
+15	345221	15
+14	826323	14
+2	315784	2
+3	260145	3
+4	740526	4
+5	432754	5
+6	563241	6
+7	485623	7
+8	725489	8
+9	498633	9
+10	745744	10
+11	198324	11
+12	745911	12
+13	319685	13
+28	685479	11
+29	111111	23
+30	111113	24
+23	499462	12
+24	575624	10
+27	811658	9
+32	111115	25
+33	111116	25
+34	222222	26
+35	121212	15
+37	333333	6
+40	333334	6
+43	111117	25
+44	323235	31
+45	323236	31
+46	323237	32
+47	323238	32
+48	121233	15
+49	721212	33
+51	222221	2
+\.
+
+
+--
+-- TOC entry 2225 (class 0 OID 0)
+-- Dependencies: 194
+-- Name: bike_id_bike_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('bike_id_bike_seq', 51, true);
+
+
+--
+-- TOC entry 2199 (class 0 OID 33551)
+-- Dependencies: 189
+-- Data for Name: model; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY model (id_model, id_typ, id_znacka, nazov, cena) FROM stdin;
+24	6	5	Athen	26.5
+26	7	3	Boxxer	50
+31	6	3	Moons	50
+32	7	15	Ninja 2.0	45
+5	1	2	S-Wokrs	40.5
+3	3	10	Commuter	20
+8	2	4	Synnapse	40
+15	6	2	Demo 8	63
+7	6	5	Fury	67
+25	10	16	Session 9.8	70.5
+12	5	6	Central	11
+11	2	7	Nivolel	20
+10	5	4	Touring	15
+9	4	8	Faith	35
+2	2	6	Attain	34
+6	1	9	Scale	28
+4	3	1	Allant	45
+13	6	1	Session	68
+14	4	9	Genius	30
+16	4	3	Scroll	45
+17	1	2	Rumor	36
+18	5	6	Curve	31
+19	1	3	Rocker	23
+33	6	2	Status II	48
+23	1	17	Raven	10
+\.
+
+
+--
+-- TOC entry 2226 (class 0 OID 0)
+-- Dependencies: 188
+-- Name: model_id_model_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('model_id_model_seq', 33, true);
+
+
+--
+-- TOC entry 2193 (class 0 OID 33516)
+-- Dependencies: 183
+-- Data for Name: objednavka; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY objednavka (id_objednavka, id_user, date_from, date_to, stav, cena_objednavky) FROM stdin;
+4	1	2016-04-05	2016-04-07	1	320
+3	1	2016-04-04	2016-04-07	1	120
+2	1	2016-04-04	2016-04-04	1	50
+1	1	2016-04-04	2016-04-04	1	145
+8	1	2016-04-09	2016-04-10	0	\N
+5	1	2016-04-05	2016-04-07	1	550.5
+7	1	2016-04-07	2016-04-10	0	781.5
+\.
+
+
+--
+-- TOC entry 2227 (class 0 OID 0)
+-- Dependencies: 182
+-- Name: objednavka_id_objednavka_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('objednavka_id_objednavka_seq', 8, true);
+
+
+--
+-- TOC entry 2207 (class 0 OID 33600)
+-- Dependencies: 197
+-- Data for Name: polozka_ob; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY polozka_ob (id_bike, id_polozka, id_objednavka) FROM stdin;
+20	3	3
+8	4	2
+20	5	2
+20	6	3
+46	7	4
+15	9	1
+32	12	5
+33	13	5
+43	16	5
+26	17	7
+27	19	0
+14	20	7
+35	21	7
+47	22	7
+30	23	7
+18	24	7
+23	25	8
+9	26	7
+\.
+
+
+--
+-- TOC entry 2228 (class 0 OID 0)
+-- Dependencies: 196
+-- Name: polozka_ob_id_polozka_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('polozka_ob_id_polozka_seq', 26, true);
+
+
+--
+-- TOC entry 2201 (class 0 OID 33572)
+-- Dependencies: 191
+-- Data for Name: prislusenstvo; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY prislusenstvo (id_prislusenstvo, nazov, cena) FROM stdin;
+1	helmet	7
+2	Bike Light	7
+3	Kid seat	4
+4	Pads	8
+5	Integral helmet	10
+6	Mudguard	3
+7	Kid helmet	3
+\.
+
+
+--
+-- TOC entry 2229 (class 0 OID 0)
+-- Dependencies: 190
+-- Name: prislusenstvo_id_prislusenstvo_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('prislusenstvo_id_prislusenstvo_seq', 7, true);
+
+
+--
+-- TOC entry 2195 (class 0 OID 33527)
+-- Dependencies: 185
+-- Data for Name: typ; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY typ (typn, id_typ) FROM stdin;
+Road	2
+XC	1
+City	3
+Enduro	4
+Downhill	6
+Treking	5
+Freeride	7
+cross	10
+\.
+
+
+--
+-- TOC entry 2230 (class 0 OID 0)
+-- Dependencies: 184
+-- Name: typ_id_typ_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('typ_id_typ_seq', 10, true);
+
+
+--
+-- TOC entry 2190 (class 0 OID 25294)
+-- Dependencies: 180
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY users (name, email, paswd, idus, type) FROM stdin;
+axb	dddd	1234	4	1
+andy	andy@gmail.com	dd	3	1
+cd	nieco	34	2	0
+qq	xyt@.com	98	5	1
+qw	abc@gmail.com	1234	6	1
+ab	nieco	11	1	1
+aa	nieco@as	aa	7	1
+\.
+
+
+--
+-- TOC entry 2231 (class 0 OID 0)
+-- Dependencies: 181
+-- Name: users_US_ID_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('"users_US_ID_seq"', 10, true);
+
+
+--
+-- TOC entry 2197 (class 0 OID 33538)
+-- Dependencies: 187
+-- Data for Name: znacka; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY znacka (id_znacka, znackan) FROM stdin;
+1	Trek
+2	Specialized
+3	CTM
+12	Rock Mashine
+5	GT
+4	Cannondale
+6	Cube
+7	Ghost
+8	Giant
+9	Scott
+10	Canyon
+15	Agang
+16	YT industiries
+17	Moongose
+18	Yeti
+\.
+
+
+--
+-- TOC entry 2232 (class 0 OID 0)
+-- Dependencies: 186
+-- Name: znacka_id_znacka_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('znacka_id_znacka_seq', 18, true);
+
+
+--
+-- TOC entry 2203 (class 0 OID 33583)
+-- Dependencies: 193
+-- Data for Name: zoznam_prislusenstva; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY zoznam_prislusenstva (id_zoznamp, id_prislusenstvo, id_objednavka) FROM stdin;
+1	7	4
+2	7	5
+4	4	7
+10	1	7
+\.
+
+
+--
+-- TOC entry 2233 (class 0 OID 0)
+-- Dependencies: 192
+-- Name: zoznam_prislusenstva_id_zoznamp_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('zoznam_prislusenstva_id_zoznamp_seq', 11, true);
+
+
+--
+-- TOC entry 2069 (class 2606 OID 33654)
+-- Name: bike_bike_code_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY bike
+    ADD CONSTRAINT bike_bike_code_key UNIQUE (bike_code);
+
+
+--
+-- TOC entry 2071 (class 2606 OID 33597)
+-- Name: bike_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY bike
+    ADD CONSTRAINT bike_pkey PRIMARY KEY (id_bike);
+
+
+--
+-- TOC entry 2059 (class 2606 OID 33656)
+-- Name: model_nazov_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY model
+    ADD CONSTRAINT model_nazov_key UNIQUE (nazov);
+
+
+--
+-- TOC entry 2061 (class 2606 OID 33559)
+-- Name: model_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY model
+    ADD CONSTRAINT model_pkey PRIMARY KEY (id_model);
+
+
+--
+-- TOC entry 2049 (class 2606 OID 33524)
+-- Name: objednavka_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY objednavka
+    ADD CONSTRAINT objednavka_pkey PRIMARY KEY (id_objednavka);
+
+
+--
+-- TOC entry 2073 (class 2606 OID 33605)
+-- Name: polozka_ob_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY polozka_ob
+    ADD CONSTRAINT polozka_ob_pkey PRIMARY KEY (id_polozka);
+
+
+--
+-- TOC entry 2063 (class 2606 OID 33658)
+-- Name: prislusenstvo_nazov_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY prislusenstvo
+    ADD CONSTRAINT prislusenstvo_nazov_key UNIQUE (nazov);
+
+
+--
+-- TOC entry 2065 (class 2606 OID 33580)
+-- Name: prislusenstvo_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY prislusenstvo
+    ADD CONSTRAINT prislusenstvo_pkey PRIMARY KEY (id_prislusenstvo);
+
+
+--
+-- TOC entry 2051 (class 2606 OID 33535)
+-- Name: typ_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY typ
+    ADD CONSTRAINT typ_pkey PRIMARY KEY (id_typ);
+
+
+--
+-- TOC entry 2053 (class 2606 OID 33660)
+-- Name: typ_typn_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY typ
+    ADD CONSTRAINT typ_typn_key UNIQUE (typn);
+
+
+--
+-- TOC entry 2045 (class 2606 OID 33662)
+-- Name: users_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_name_key UNIQUE (name);
+
+
+--
+-- TOC entry 2047 (class 2606 OID 25312)
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (idus);
+
+
+--
+-- TOC entry 2055 (class 2606 OID 33546)
+-- Name: znacka_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY znacka
+    ADD CONSTRAINT znacka_pkey PRIMARY KEY (id_znacka);
+
+
+--
+-- TOC entry 2057 (class 2606 OID 33664)
+-- Name: znacka_znackan_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY znacka
+    ADD CONSTRAINT znacka_znackan_key UNIQUE (znackan);
+
+
+--
+-- TOC entry 2067 (class 2606 OID 33588)
+-- Name: zoznam_prislusenstva_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY zoznam_prislusenstva
+    ADD CONSTRAINT zoznam_prislusenstva_pkey PRIMARY KEY (id_zoznamp);
+
+
+--
+-- TOC entry 2075 (class 2606 OID 33565)
+-- Name: model_id_typ_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY model
+    ADD CONSTRAINT model_id_typ_fkey FOREIGN KEY (id_typ) REFERENCES typ(id_typ);
+
+
+--
+-- TOC entry 2074 (class 2606 OID 33560)
+-- Name: model_id_znacka_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY model
+    ADD CONSTRAINT model_id_znacka_fkey FOREIGN KEY (id_znacka) REFERENCES znacka(id_znacka);
+
+
+--
+-- TOC entry 2214 (class 0 OID 0)
+-- Dependencies: 5
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+-- Completed on 2016-04-10 21:16:22
+
+--
+-- PostgreSQL database dump complete
+--
+
